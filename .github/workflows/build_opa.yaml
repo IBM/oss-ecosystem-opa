@@ -1,12 +1,11 @@
 name: Build OPA for Power
 
 on:
-  push:
-
-env:
- 
-  IMAGE_NAME: IBM/
-
+  workflow_call:
+    inputs:
+      release:
+        required: true
+        type: string
 
 jobs:
   build:
@@ -49,7 +48,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           allowUpdates: true
           artifacts: _release/0.46.1/opa_linux_ppc64le_static
-          name: opa_linux_ppc64le_static
+          name: ${{ inputs.release }}
           replacesArtifacts: true
           draft: false
           prerelease: false
