@@ -40,3 +40,16 @@ jobs:
           ls -ltra
           cd _release
           ls -ltra
+    
+      - name: Create Release
+        id: create_release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: 0.46.1
+          token: ${{ secrets.GITHUB_TOKEN }}
+          allowUpdates: true
+          artifacts: _release/0.46.1/opa_linux_ppc64le_static
+          name: opa_linux_ppc64le_static
+          replacesArtifacts: true
+          draft: false
+          prerelease: false
