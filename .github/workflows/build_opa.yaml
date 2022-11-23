@@ -1,14 +1,11 @@
-name: Docker
+name: Build OPA for Power
 
 on:
   push:
 
 env:
-  REGISTRY: ghcr.io
-  # github.repository as <account>/<repo>
-  IMAGE_NAME: IBM/kind-node
-  VERSION: v1.25.3
-  KIND_VERSION: v0.17.0
+ 
+  IMAGE_NAME: IBM/
 
 
 jobs:
@@ -35,11 +32,6 @@ jobs:
 
       - name: Build opa binary
         run: |
-          apt-get update -y
-          apt-get install wget -y
-          apt-get install make -y
-          apt-get install git -y
-          apt-get install unzip -y
           wget https://github.com/open-policy-agent/opa/archive/refs/tags/v0.46.1.zip
           unzip v0.46.1.zip
           cd v0.46.1
