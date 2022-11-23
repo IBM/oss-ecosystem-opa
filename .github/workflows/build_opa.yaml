@@ -1,0 +1,46 @@
+name: Docker
+
+on:
+  push:
+
+env:
+  REGISTRY: ghcr.io
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: IBM/kind-node
+  VERSION: v1.25.3
+  KIND_VERSION: v0.17.0
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    strategy:
+      fail-fast: false
+ 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: make sure repository is lowercase
+        run: echo "IMAGE_NAME=${IMAGE_NAME,,}" >>${GITHUB_ENV}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ github.token }}
+
+      - name: Build opa binary
+        run: |
+          yum install unzip -y
+          wget https://github.com/open-policy-agent/opa/archive/refs/tags/v0.46.1.zip
+          unzip v0.46.1.zip
+          cd v0.46.1
+          env GOOS=linux GOARCH=ppc64le make ci-go-ci-build-linux-static
+          pwd
+          ls -ltra
+          cd _release
+          ls -ltra
