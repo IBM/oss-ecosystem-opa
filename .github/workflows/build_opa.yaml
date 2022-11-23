@@ -35,7 +35,11 @@ jobs:
 
       - name: Build opa binary
         run: |
-          yum install unzip -y
+          apt-get update -y
+          apt-get install wget -y
+          apt-get install make -y
+          apt-get install git -y
+          apt-get install unzip -y
           wget https://github.com/open-policy-agent/opa/archive/refs/tags/v0.46.1.zip
           unzip v0.46.1.zip
           cd v0.46.1
