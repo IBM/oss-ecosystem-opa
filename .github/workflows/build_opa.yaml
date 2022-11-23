@@ -33,7 +33,7 @@ jobs:
           tag: ${{ inputs.release }}
           token: ${{ secrets.GITHUB_TOKEN }}
           allowUpdates: true
-          artifacts: _release/${{ inputs.release }}/opa_linux_ppc64le_static
+          artifacts: opa-0.46.1/_release/${{ inputs.release }}/opa_linux_ppc64le_static
           name: ${{ inputs.release }}
           replacesArtifacts: true
           draft: false
