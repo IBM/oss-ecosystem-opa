@@ -1,4 +1,4 @@
-name: Check for new opa ease
+name: Check for new opa release
 
 on:
   push:
