@@ -6,7 +6,9 @@ on:
       release:
         required: true
         type: string
-
+      latest_tag:
+        required: true
+        type: string
 
 jobs:
   build:
@@ -34,7 +36,7 @@ jobs:
           tag: ${{ inputs.release }}
           token: ${{ secrets.GITHUB_TOKEN }}
           allowUpdates: true
-          artifacts: opa/_release/${{ needs.check-release.outputs.latest-tag }}/opa_linux_ppc64le_static
+          artifacts: opa/_release/${{ inputs.latest_tag }}/opa_linux_ppc64le_static
           name: ${{ inputs.release }}
           replacesArtifacts: true
           draft: false
