@@ -42,4 +42,5 @@ jobs:
     if: ${{ needs.check-release.outputs.latest-release }} != ${{ needs.check-release.outputs.current-release }}
     uses: ./.github/workflows/build_opa.yaml
     with:
-      release: ${{ needs.check-release.outputs.latest-release }}, ${{ needs.check-release.outputs.latest-tag }}
+      release: ${{ needs.check-release.outputs.latest-release }}
+      latest_tag: ${{ needs.check-release.outputs.latest-tag }}
