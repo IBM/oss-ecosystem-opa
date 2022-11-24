@@ -1,9 +1,10 @@
 name: Check for new opa release
 
 on:
-  schedule:
-    # At 00:00 on every 7th day-of-week
-    - cron: '32 * * * *'
+   schedule:
+   # At 00:00 on every 7th day-of-week
+     - cron: '0 0 * * */7'
+   workflow_dispatch:
 
 jobs:
   check-release:
