@@ -34,7 +34,7 @@ jobs:
           tag: ${{ inputs.release }}
           token: ${{ secrets.GITHUB_TOKEN }}
           allowUpdates: true
-          artifacts: opa/_release/
+          artifacts: opa/_release/$(curl -s https://api.github.com/repos/open-policy-agent/opa/releases/latest | grep tag_name | cut -d '"' -f4 | cut -c 2-)/opa_linux_ppc64le_static
           name: ${{ inputs.release }}
           replacesArtifacts: true
           draft: false
