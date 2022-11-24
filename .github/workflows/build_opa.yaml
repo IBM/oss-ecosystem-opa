@@ -17,10 +17,10 @@ jobs:
 
       - name: Build opa binary
         run: |
-          wget https://github.com/open-policy-agent/opa/archive/refs/tags/${{ inputs.release }}.zip
-          unzip ${{ inputs.release }}.zip
-          ls -ltra
-          cd opa-0.46.1
+          git clone https://github.com/open-policy-agent/opa.git
+          TAG=$(curl -shttps://api.github.com/repos/open-policy-agent/opa/releases/latest | grep tag_name | cut -d '"' -f4)
+          git checkout tags/$TAG
+          cd opa
           env GOOS=linux GOARCH=ppc64le make ci-go-ci-build-linux-static
           pwd
           ls -ltra
@@ -34,7 +34,7 @@ jobs:
           tag: ${{ inputs.release }}
           token: ${{ secrets.GITHUB_TOKEN }}
           allowUpdates: true
-          artifacts: opa-0.46.1/_release/${{ inputs.release }}/opa_linux_ppc64le_static
+          artifacts: opa/_release/
           name: ${{ inputs.release }}
           replacesArtifacts: true
           draft: false
