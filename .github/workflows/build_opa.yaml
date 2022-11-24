@@ -18,9 +18,9 @@ jobs:
       - name: Build opa binary
         run: |
           git clone https://github.com/open-policy-agent/opa.git
-          TAG=$(curl -shttps://api.github.com/repos/open-policy-agent/opa/releases/latest | grep tag_name | cut -d '"' -f4)
-          git checkout tags/$TAG
+          TAG=$(curl -s https://api.github.com/repos/open-policy-agent/opa/releases/latest | grep tag_name | cut -d '"' -f4)
           cd opa
+          git checkout tags/$TAG
           env GOOS=linux GOARCH=ppc64le make ci-go-ci-build-linux-static
           pwd
           ls -ltra
