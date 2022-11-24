@@ -34,5 +34,8 @@ jobs:
           echo "Current Terraform version on Power: "$TF_CURRENT
           
   build-new-release:
+    needs: [check-release]
     if: ${{ needs.check-release.outputs.latest-release }} != ${{ needs.check-release.outputs.current-release }}
     uses: ./.github/workflows/build_opa.yaml
+    with:
+      release: ${{ needs.check-release.outputs.latest-release }}
