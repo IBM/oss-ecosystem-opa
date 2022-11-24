@@ -11,6 +11,7 @@ jobs:
     
     outputs:
       latest-release: ${{ steps.latest.outputs.LATEST_RELEASE }}
+      current-release: ${{ steps.current.outputs.CURRENT_RELEASE }}
 
     steps:
       - uses: actions/checkout@v2
@@ -18,13 +19,20 @@ jobs:
       - name: Get latest opa release
         id: latest
         run: |
+          sudo apt-get update -y
+          sudo apt-get install -y curl
           
-          GE_LATEST=0.46.1
-          echo '::set-output name=LATEST_RELEASE::'$GE_LATEST
-          echo "Latest opa version "$GE_LATEST
-          echo "Latest opa version: "$LATEST_RELEASE
+          TF_LATEST=$(curl -s https://api.github.com/repos/open-policy-agent/opa/releases/latest | grep tag_name | cut -d '"' -f4)
+          echo '::set-output name=LATEST_RELEASE::'$TF_LATEST
+          echo "Latest Terraform version: "$TF_LATEST
+      
+      - name: Get current Terraform release for Power
+        id: current
+        run: |
+          TF_CURRENT=$(curl -s https://api.github.com/repos/IBM/oss-ecosystem-opa/releases/latest | grep tag_name | cut -d '"' -f4 | grep tag_name | cut -d '"' -f4)
+          echo '::set-output name=CURRENT_RELEASE::'$TF_CURRENT
+          echo "Current Terraform version on Power: "$TF_CURRENT
+          
   build-new-release:
-    needs: [check-release]
+    if: ${{ needs.check-release.outputs.latest-release }} != ${{ needs.check-release.outputs.current-release }}
     uses: ./.github/workflows/build_opa.yaml
-    with:
-      release: ${{ needs.check-release.outputs.latest-release }}
