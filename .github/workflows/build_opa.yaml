@@ -7,13 +7,12 @@ on:
         required: true
         type: string
 
-env:
-  TAG: $(curl -s https://api.github.com/repos/open-policy-agent/opa/releases/latest | grep tag_name | cut -d '"' -f4 | cut -c 2-)
 
 jobs:
   build:
     runs-on: ubuntu-latest
- 
+    outputs:
+      latest-tag: ${{ steps.latest.outputs.LATEST_TAG }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -25,10 +24,8 @@ jobs:
           cd opa
           git checkout tags/$TAG
           env GOOS=linux GOARCH=ppc64le make ci-go-ci-build-linux-static
-          pwd
-          ls -ltra
-          cd _release
-          ls -ltra
+          TF_LATEST=$(curl -s https://api.github.com/repos/open-policy-agent/opa/releases/latest | grep tag_name | cut -d '"' -f4 | cut -c 2-)
+          echo '::set-output name=LATEST_TAG::'$TF_LATEST
     
       - name: Create Release
         id: create_release
@@ -37,7 +34,7 @@ jobs:
           tag: ${{ inputs.release }}
           token: ${{ secrets.GITHUB_TOKEN }}
           allowUpdates: true
-          artifacts: opa/_release/${{ env.TAG }}/opa_linux_ppc64le_static
+          artifacts: opa/_release/${{ needs.check-release.outputs.latest-tag }}/opa_linux_ppc64le_static
           name: ${{ inputs.release }}
           replacesArtifacts: true
           draft: false
