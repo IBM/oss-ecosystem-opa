@@ -28,7 +28,18 @@ jobs:
           env GOOS=linux GOARCH=ppc64le make ci-go-ci-build-linux-static
           TF_LATEST=$(curl -s https://api.github.com/repos/open-policy-agent/opa/releases/latest | grep tag_name | cut -d '"' -f4 | cut -c 2-)
           echo '::set-output name=LATEST_TAG::'$TF_LATEST
-    
+      
+      - uses: uraimo/run-on-arch-action@v2.2.0
+        name: Sanity checking of built binary
+        id: sanity_checking
+        with:
+          arch: ppc64le
+          distro: ubuntu20.04
+
+          run: |
+            apt-get update -y
+            ./opa/_release/${{ inputs.latest_tag }}/opa_linux_ppc64le_static version    
+
       - name: Create Release
         id: create_release
         uses: ncipollo/release-action@v1
